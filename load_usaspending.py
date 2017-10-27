@@ -1,4 +1,5 @@
 import configparser
+import json
 import logging
 
 from pymongo import MongoClient
@@ -10,7 +11,13 @@ def load_usaspending():
     logging.basicConfig(level=logging.INFO)
 
     db = get_mongo_client()
-    logging.info('Successfully connected to mongodb: {}'.format(db))
+
+    # Insert Treasury Account Symbol (TAS) documents
+    tas = db.tas
+    for row in open('data/tas.json'):
+        obj = json.loads(row)
+        tas_id = tas.insert_one(obj).inserted_id
+        logging.info('Inserted TAS {} as {}'.format(obj.get('label'), tas_id))
 
 
 def get_mongo_client():
