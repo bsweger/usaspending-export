@@ -14,9 +14,15 @@ def load_usaspending():
 
     # Insert Treasury Account Symbol (TAS) documents
     tas = db.tas
-    for row in open('data/tas.json'):
+    with open('data/tas.json') as data:
+        return load_tas(tas, data)
+
+
+def load_tas(collection, file):
+    """Load usaspending account data."""
+    for row in file:
         obj = json.loads(row)
-        tas_id = tas.insert_one(obj).inserted_id
+        tas_id = collection.insert_one(obj).inserted_id
         logging.info('Inserted TAS {} as {}'.format(obj.get('label'), tas_id))
 
 
@@ -25,7 +31,6 @@ def get_mongo_client():
     config = configparser.ConfigParser()
     config.read('config/config.ini')
     mongo = config['mongodb']
-    # TODO: error checking for mongo config
 
     client = MongoClient(mongo['host'], int(mongo['port']))
     db = client.usaspending
