@@ -2,3 +2,5 @@
 .cache
 
 config.ini
+
+data/awards.json
