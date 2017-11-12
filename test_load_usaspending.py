@@ -21,10 +21,13 @@ def documents(tmpdir):
 def test_load_documents(documents):
     """Test inserting a series of JSON objects."""
     collection = MongoClient().db.collection
+    collection.insert_one({"fain": "existingfain"})
     load_documents(collection, documents)
 
+    # collection's existing data should be dropped before adding new documents
     assert collection.count() == 4
     assert collection.find_one({'label': '001X0137'})
+    assert collection.find_one({'fain': 'existingfain'}) is None
 
 
 @pytest.mark.skip(reason="need to mock/patch/refactor the s3 connection code")

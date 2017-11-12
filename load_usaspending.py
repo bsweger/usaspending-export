@@ -26,14 +26,25 @@ def load_usaspending():
 
 
 def load_documents(collection, thefile):
-    """Load a file of json objects to the specified mongodb collection."""
+    """Load a file of json objects to the specified mongod collection.
+
+    Keyword arguments:
+    collection -- mongo db collection to be loaded (existing data is dropped)
+    thefile -- a file of json objects to insert to the mongo collection
+    Load a file of json objects to the specified mongodb collection.
+    """
+    count = collection.count()
+    logging.info(
+        'Dropped {} documents from {}'.format(count, collection.name)
+    )
+    collection.drop()
     with smart_open.smart_open(thefile) as data:
         count = 0
         for row in data:
             collection.insert_one(json.loads(row)).inserted_id
             count += 1
         logging.info(
-            'Inserted {} documents into {}'.format(count, collection))
+            'Inserted {} documents into {}'.format(count, collection.name))
 
 
 def get_mongo_client():
@@ -41,12 +52,12 @@ def get_mongo_client():
     mongo = settings['mongodb']
 
     client = MongoClient(mongo['host'], int(mongo['port']))
-    db = client.usaspending
+    db = client[mongo['dbname']]
     return db
 
 
 def get_s3_key(s3url):
-    """Returns S3 key from URL."""
+    """Return S3 key from URL."""
     bucket, data = os.path.split(urlparse(s3url).path)
     # using boto instead of boto3 to avail ourselves of some
     # smart_open syntactic sugar when working with s3 data
