@@ -1,5 +1,6 @@
 from mongomock import MongoClient
 import pytest
+from s3fs.core import S3FileSystem
 
 from load_usaspending import load_documents
 
@@ -18,8 +19,10 @@ def documents(tmpdir):
     return str(test_file)
 
 
-def test_load_documents(documents):
+def test_load_documents(monkeypatch, documents):
     """Test inserting a series of JSON objects."""
+    # monkeypatch S3FileSystem so we can read tmp test data from pytest fixture
+    monkeypatch.setattr(S3FileSystem, 'open', open)
     collection = MongoClient().db.collection
     collection.insert_one({"fain": "existingfain"})
     load_documents(collection, documents)

@@ -1,12 +1,9 @@
 import json
 import logging
-import os.path
 from urllib.parse import urlparse
 
-import boto
-from boto.exception import S3ResponseError
 from pymongo import MongoClient
-import smart_open
+from s3fs.core import S3FileSystem
 
 from config.settings import settings
 
@@ -19,26 +16,27 @@ def load_usaspending():
     db = get_mongo_client()
 
     # For now, working under assumption that json data is somewhere on S3
-    key = get_s3_key(settings['s3']['tas'])
-    load_documents(db.tas, key)
-    key = get_s3_key(settings['s3']['awards'])
-    load_documents(db.awards, key)
+    path = get_s3_path(settings['s3']['tas'])
+    load_documents(db.tas, path)
+    path = get_s3_path(settings['s3']['awards'])
+    load_documents(db.awards, path)
 
 
-def load_documents(collection, thefile):
+def load_documents(collection, s3path):
     """Load a file of json objects to the specified mongod collection.
 
     Keyword arguments:
     collection -- mongo db collection to be loaded (existing data is dropped)
-    thefile -- a file of json objects to insert to the mongo collection
-    Load a file of json objects to the specified mongodb collection.
+    s3path -- location of file w/ json objects to insert to mongo collection
     """
     count = collection.count()
     logging.info(
         'Dropped {} documents from {}'.format(count, collection.name)
     )
     collection.drop()
-    with smart_open.smart_open(thefile) as data:
+
+    s3 = S3FileSystem(anon=False)
+    with s3.open(s3path, mode='rb') as data:
         count = 0
         for row in data:
             collection.insert_one(json.loads(row)).inserted_id
@@ -56,19 +54,13 @@ def get_mongo_client():
     return db
 
 
-def get_s3_key(s3url):
+def get_s3_path(s3url):
     """Return S3 key from URL."""
-    bucket, data = os.path.split(urlparse(s3url).path)
-    # using boto instead of boto3 to avail ourselves of some
-    # smart_open syntactic sugar when working with s3 data
-    try:
-        key = boto.connect_s3().get_bucket(bucket[1:]).get_key(data)
-    except S3ResponseError:
-        logging.error('Invalid S3 bucket: {}'.format(s3url))
-        raise
-    if key is None:
-        raise ValueError('Object {} not found on S3: {}'.format(data, s3url))
-    return key
+    s3 = S3FileSystem(anon=False)
+    path = urlparse(s3url).path[1:]
+    if not s3.exists(path):
+        raise ValueError('Path not found on S3: {}'.format(path))
+    return path
 
 
 if __name__ == '__main__':
