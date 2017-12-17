@@ -1,4 +1,6 @@
 *.pyc
+*.ipynb
+.ipynb_checkpoints/
 .cache
 .envrc
 config.ini
