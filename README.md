@@ -36,8 +36,8 @@ I worked on the DATA Act implementation team, know the data pretty well, and fee
 
 ### Install
 
-1. From the command line, clone the project repository to your preferred location: `git@bitbucket.org:bsweger/fedspending-us.git`
-2. Change to the project directory: `cd fedspending-us`
+1. From the command line, clone the project repository to your preferred location: `git@github.com:bsweger/usaspending-export.git`
+2. Change to the project directory: `cd usaspending-export`
 3. Install Python dependencies: `pip install -r requirements.txt`
 4. Create `config/config.ini` and fill in your config values accordingly (use `config/config_example` as a template)
 
