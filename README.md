@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/bsweger/usaspending-export.svg?style=svg)](https://circleci.com/gh/bsweger/usaspending-export)
+
 # USAspending Flattened
 
 ## Overview
