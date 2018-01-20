@@ -1,4 +1,6 @@
 [![CircleCI](https://circleci.com/gh/bsweger/usaspending-export.svg?style=svg)](https://circleci.com/gh/bsweger/usaspending-export)
+[![Maintainability](https://api.codeclimate.com/v1/badges/860f4b9e4a16c9645509/maintainability)](https://codeclimate.com/github/bsweger/usaspending-export/maintainability)
+[![Test  Coverage](https://api.codeclimate.com/v1/badges/860f4b9e4a16c9645509/test_coverage)](https://codeclimate.com/github/bsweger/usaspending-export/test_coverage)
 
 # USAspending Flattened
 
