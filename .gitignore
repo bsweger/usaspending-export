@@ -2,6 +2,7 @@
 *.ipynb
 .ipynb_checkpoints/
 .cache
+.coverage
 .envrc
 config.ini
 data/
