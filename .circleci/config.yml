@@ -40,12 +40,16 @@ jobs:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
-      # run tests!
+      # run tests
       - run:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest
+            mkdir -p test-reports
+            py.test --cov=usaspending_export --cov-report xml:test-reports/coverage.xml
+
+      - store_test_results:
+          path: test-reports
 
       - store_artifacts:
           path: test-reports
