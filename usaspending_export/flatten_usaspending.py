@@ -1,7 +1,7 @@
 import logging
 import subprocess
 
-from util.mongo import get_mongo_client
+from usaspending_export.util.mongo import get_mongo_client
 
 from config.settings import settings
 

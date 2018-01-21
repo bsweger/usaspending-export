@@ -4,8 +4,8 @@ import logging
 import smart_open
 
 from config.settings import settings
-from util.aws import get_s3_key
-from util.mongo import get_mongo_client
+from usaspending_export.util.aws import get_s3_key
+from usaspending_export.util.mongo import get_mongo_client
 
 
 def load_usaspending():
