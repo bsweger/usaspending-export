@@ -55,8 +55,8 @@ jobs:
             . venv/bin/activate
             ./cc-test-reporter before-build
             mkdir -p test-reports
-            py.test --cov=usaspending_export --cov-report xml:test-reports/coverage.xml
-            ./cc-test-reporter after-build --coverage-input-type cobertura --exit-code $?
+            py.test --cov=usaspending_export --cov-report xml
+            ./cc-test-reporter after-build --coverage-input-type coverage.py --exit-code $?
       - store_test_results:
           path: test-reports
 
