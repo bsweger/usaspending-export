@@ -57,6 +57,7 @@ jobs:
             mkdir -p test-reports
             py.test --cov=usaspending_export --cov-report xml
             ./cc-test-reporter after-build --coverage-input-type coverage.py --exit-code $?
+            mv coverage.xml test-reports/
       - store_test_results:
           path: test-reports
 
