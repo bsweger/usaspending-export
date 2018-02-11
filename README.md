@@ -48,3 +48,5 @@ I worked on the DATA Act implementation team, know the data pretty well, and fee
 ### Loading Data
 
 Coming soon!
+
+To restore the latest USAspending Postgres DB from the AWS public RDS snapshot and export its data to S3, you'll need to [configure AWS credentials for use by boto3](http://boto3.readthedocs.io/en/latest/guide/configuration.html). In addition to providing your access and secret access keys, set the default AWS region to `us-east-1` (the location of the public snapshot).
