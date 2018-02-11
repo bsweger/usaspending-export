@@ -1,9 +1,8 @@
 import logging
 import subprocess
 
-from usaspending_export.util.mongo import get_mongo_client
-
-from config.settings import settings
+from util.mongo import get_mongo_client
+from util.settings import settings
 
 
 def pipeline_awards(collection):

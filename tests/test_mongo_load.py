@@ -1,7 +1,7 @@
 from mongomock import MongoClient
 import pytest
 
-from usaspending_export.load_usaspending import load_documents
+from usaspending_export.mongo_load import load_documents
 
 
 @pytest.fixture
