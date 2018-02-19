@@ -64,9 +64,19 @@ Invoke test from the project's root
 
 **TODO:** Streamline all of this when there's a better idea of which pieces are actually useful and worthy of further tweaking.
 
-1. Restore an RDS instance from the AWS public datasets snapshot
-2. Verify db connectivity. If this doesn't work, check the security group settings of the RDS instance. It's likely that you need to allow inbound traffic on port 5432 (for postgres access).
-3. Run queries that create the .json output.
+1. Restore an RDS instance from the AWS public datasets snapshot:  
+    a. To do this using the AWS console, [follow the instructions here](https://aws.amazon.com/public-datasets/usaspending/)  
+    b. To restore programmatically using the code in this project, open a Python terminal from the project root:
+
+        from usaspending_export.util.aws import restore_rds_snapshot
+
+        r = restore_rds_snapshot('arn:aws:rds:us-east-1:515495268755:snapshot:usaspending-db', 'usaspending-restore')
+
+        # to view the endpoint and other attributes of the restored restore_rds_snapshot
+        print(r)
+
+2. Using the endpoint of the newly-restored snapshot as the hostname, verify connectivity (see the [sample config file](config/config_example.ini) for username, password, and database name). If this doesn't work, check the security group settings of the RDS instance. It's likely that you need to allow inbound traffic on port 5432 (for postgres access).
+3. Run [queries that create the .json output](usaspending_export/psql/).
 4. Upload the .json output to an S3 get_bucket (make sure the names match the names specified in `config.ini`).
 5. Load data to mongodb (**important:** prior data in the mongo collections is dropped before the new data is loaded). From the `usaspending_export` folder, run `python load_usaspending.py`.
 6. Export a flattened version of the awards data to a .csv (will be named `usaspending_awards.csv`). From the `usaspending_export` folder, run `python flatten_usaspending.py`.
